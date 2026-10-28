@@ -1,0 +1,113 @@
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import { colors } from '../theme/colors';
+import { spacing, borderRadius } from '../theme/spacing';
+import { CustomerDashboardScreen } from '../screens/CustomerDashboardScreen';
+import { AnalysisScreen } from '../screens/AnalysisScreen';
+import { TransactionsScreen } from '../screens/TransactionsScreen';
+import { CategoriesScreen } from '../screens/CategoriesScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
+
+const Tab = createBottomTabNavigator();
+
+export const CustomerTabNavigator = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName="Dashboard"
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarShowLabel: true,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textMuted,
+        tabBarStyle: styles.tabBar,
+        tabBarLabelStyle: styles.tabBarLabel,
+        tabBarItemStyle: styles.tabBarItem,
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Dashboard') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Analysis') {
+            iconName = focused ? 'pie-chart' : 'pie-chart-outline';
+          } else if (route.name === 'Transactions') {
+            iconName = focused ? 'swap-horizontal' : 'swap-horizontal-outline';
+          } else if (route.name === 'Categories') {
+            iconName = focused ? 'grid' : 'grid-outline';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
+          }
+
+          return (
+            <View style={[styles.iconWrapper, focused && styles.activeIconWrapper]}>
+              <Ionicons name={iconName} size={22} color={color} />
+            </View>
+          );
+        },
+      })}
+    >
+      <Tab.Screen
+        name="Dashboard"
+        component={CustomerDashboardScreen}
+        options={{ tabBarLabel: 'Home' }}
+      />
+      <Tab.Screen
+        name="Analysis"
+        component={AnalysisScreen}
+        options={{ tabBarLabel: 'Analysis' }}
+      />
+      <Tab.Screen
+        name="Transactions"
+        component={TransactionsScreen}
+        options={{ tabBarLabel: 'Ledger' }}
+      />
+      <Tab.Screen
+        name="Categories"
+        component={CategoriesScreen}
+        options={{ tabBarLabel: 'Categories' }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ tabBarLabel: 'Profile' }}
+      />
+    </Tab.Navigator>
+  );
+};
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: colors.surface,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderLight,
+    height: 64,
+    paddingBottom: 8,
+    paddingTop: 6,
+    elevation: 8,
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+  },
+  tabBarLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: -2,
+  },
+  tabBarItem: {
+    paddingVertical: 2,
+  },
+  iconWrapper: {
+    width: 36,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: borderRadius.md,
+  },
+  activeIconWrapper: {
+    backgroundColor: colors.primaryLight,
+  },
+});
+
+export default CustomerTabNavigator;
